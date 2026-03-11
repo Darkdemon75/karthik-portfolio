@@ -1,130 +1,238 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 
-interface GradientOrb {
+interface Jet {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  color: string;
-  hue: number;
+  speed: number;
+  size: number;
+  altitude: number; // y drift
+  trailLength: number;
+  trail: { x: number; y: number }[];
+}
+
+interface Star {
+  x: number;
+  y: number;
+  size: number;
+  opacity: number;
+  twinkleSpeed: number;
+  twinkleOffset: number;
+}
+
+interface Cloud {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  speed: number;
+  opacity: number;
 }
 
 export function LiveWallpaper() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const orbsRef = useRef<GradientOrb[]>([]);
   const animationRef = useRef<number>();
-  const mouseRef = useRef({ x: 0.5, y: 0.5 });
-  
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
-  
-  const springX = useSpring(mouseX, { stiffness: 50, damping: 30 });
-  const springY = useSpring(mouseY, { stiffness: 50, damping: 30 });
+  const jetsRef = useRef<Jet[]>([]);
+  const starsRef = useRef<Star[]>([]);
+  const cloudsRef = useRef<Cloud[]>([]);
+  const frameRef = useRef(0);
 
-  const initOrbs = useCallback((width: number, height: number) => {
-    const colors = [
-      { color: "rgba(138, 43, 226, 0.6)", hue: 280 },  // Purple
-      { color: "rgba(255, 105, 180, 0.5)", hue: 330 }, // Pink
-      { color: "rgba(0, 191, 255, 0.5)", hue: 195 },   // Cyan
-      { color: "rgba(255, 69, 0, 0.4)", hue: 15 },     // Orange-red
-      { color: "rgba(50, 205, 50, 0.4)", hue: 120 },   // Green
-      { color: "rgba(255, 215, 0, 0.35)", hue: 50 },   // Gold
-    ];
-
-    orbsRef.current = colors.map((c, i) => ({
+  const initScene = useCallback((width: number, height: number) => {
+    // Stars in upper sky
+    starsRef.current = Array.from({ length: 120 }, () => ({
       x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      radius: Math.min(width, height) * (0.3 + Math.random() * 0.3),
-      color: c.color,
-      hue: c.hue,
+      y: Math.random() * height * 0.5,
+      size: Math.random() * 1.5 + 0.3,
+      opacity: Math.random() * 0.7 + 0.3,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+      twinkleOffset: Math.random() * Math.PI * 2,
     }));
+
+    // Clouds at mid level
+    cloudsRef.current = Array.from({ length: 6 }, (_, i) => ({
+      x: Math.random() * width,
+      y: height * 0.3 + Math.random() * height * 0.35,
+      width: 180 + Math.random() * 220,
+      height: 40 + Math.random() * 60,
+      speed: 0.08 + Math.random() * 0.12,
+      opacity: 0.04 + Math.random() * 0.08,
+    }));
+
+    // Fighter jets
+    jetsRef.current = Array.from({ length: 2 }, (_, i) => ({
+      x: -200 - i * 600,
+      y: height * (0.2 + i * 0.15),
+      speed: 1.2 + i * 0.5,
+      size: 18 + i * 6,
+      altitude: (Math.random() - 0.5) * 0.08,
+      trailLength: 80 + i * 30,
+      trail: [],
+    }));
+  }, []);
+
+  const drawJet = useCallback((ctx: CanvasRenderingContext2D, x: number, y: number, size: number) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = "rgba(220, 230, 255, 0.92)";
+    ctx.strokeStyle = "rgba(180, 200, 255, 0.6)";
+    ctx.lineWidth = 0.5;
+
+    // Fuselage
+    ctx.beginPath();
+    ctx.moveTo(size * 2.2, 0);
+    ctx.lineTo(-size * 1.2, -size * 0.22);
+    ctx.lineTo(-size * 1.8, 0);
+    ctx.lineTo(-size * 1.2, size * 0.22);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Main wings
+    ctx.beginPath();
+    ctx.moveTo(size * 0.2, 0);
+    ctx.lineTo(-size * 0.6, -size * 1.1);
+    ctx.lineTo(-size * 1.3, -size * 1.0);
+    ctx.lineTo(-size * 0.8, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(size * 0.2, 0);
+    ctx.lineTo(-size * 0.6, size * 1.1);
+    ctx.lineTo(-size * 1.3, size * 1.0);
+    ctx.lineTo(-size * 0.8, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Tail fins
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.9, 0);
+    ctx.lineTo(-size * 1.5, -size * 0.55);
+    ctx.lineTo(-size * 1.8, -size * 0.45);
+    ctx.lineTo(-size * 1.3, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.9, 0);
+    ctx.lineTo(-size * 1.5, size * 0.55);
+    ctx.lineTo(-size * 1.8, size * 0.45);
+    ctx.lineTo(-size * 1.3, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    // Cockpit glow
+    const cockpitGrad = ctx.createRadialGradient(size * 0.8, -size * 0.05, 0, size * 0.8, -size * 0.05, size * 0.35);
+    cockpitGrad.addColorStop(0, "rgba(150, 220, 255, 0.9)");
+    cockpitGrad.addColorStop(1, "rgba(80, 160, 220, 0)");
+    ctx.fillStyle = cockpitGrad;
+    ctx.beginPath();
+    ctx.ellipse(size * 0.8, -size * 0.05, size * 0.35, size * 0.14, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }, []);
+
+  const drawCloud = useCallback((ctx: CanvasRenderingContext2D, cloud: Cloud) => {
+    ctx.save();
+    const grad = ctx.createRadialGradient(cloud.x, cloud.y, 0, cloud.x, cloud.y, cloud.width / 2);
+    grad.addColorStop(0, `rgba(180, 200, 255, ${cloud.opacity})`);
+    grad.addColorStop(1, `rgba(100, 140, 200, 0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.ellipse(cloud.x, cloud.y, cloud.width / 2, cloud.height / 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   }, []);
 
   const animate = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const width = canvas.width;
     const height = canvas.height;
-    
-    // Get spring values for smooth mouse influence
-    const mx = springX.get();
-    const my = springY.get();
+    frameRef.current++;
+    const t = frameRef.current;
 
-    // Clear with dark background
-    ctx.fillStyle = "rgb(12, 12, 20)";
+    // Sky gradient — deep space top to twilight horizon
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, height);
+    skyGrad.addColorStop(0, "rgb(2, 4, 18)");
+    skyGrad.addColorStop(0.35, "rgb(5, 10, 35)");
+    skyGrad.addColorStop(0.65, "rgb(12, 25, 65)");
+    skyGrad.addColorStop(0.85, "rgb(30, 55, 110)");
+    skyGrad.addColorStop(1, "rgb(60, 90, 150)");
+    ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, width, height);
 
-    // Update and draw orbs
-    orbsRef.current.forEach((orb, index) => {
-      // Subtle mouse influence
-      const dx = (mx - 0.5) * 30;
-      const dy = (my - 0.5) * 30;
-      
-      // Add slight attraction to mouse position
-      const attractX = (mx * width - orb.x) * 0.0003;
-      const attractY = (my * height - orb.y) * 0.0003;
-      
-      orb.vx += attractX;
-      orb.vy += attractY;
-      
-      // Apply velocity with damping
-      orb.vx *= 0.995;
-      orb.vy *= 0.995;
-      
-      orb.x += orb.vx + dx * 0.01;
-      orb.y += orb.vy + dy * 0.01;
+    // Subtle aurora shimmer
+    const auroraGrad = ctx.createLinearGradient(0, height * 0.1, width, height * 0.4);
+    auroraGrad.addColorStop(0, `rgba(0, 80, 180, ${0.04 + Math.sin(t * 0.008) * 0.02})`);
+    auroraGrad.addColorStop(0.5, `rgba(0, 160, 120, ${0.03 + Math.cos(t * 0.006) * 0.015})`);
+    auroraGrad.addColorStop(1, `rgba(80, 0, 160, ${0.04 + Math.sin(t * 0.01) * 0.02})`);
+    ctx.fillStyle = auroraGrad;
+    ctx.fillRect(0, 0, width, height * 0.5);
 
-      // Wrap around edges with padding
-      const padding = orb.radius;
-      if (orb.x < -padding) orb.x = width + padding;
-      if (orb.x > width + padding) orb.x = -padding;
-      if (orb.y < -padding) orb.y = height + padding;
-      if (orb.y > height + padding) orb.y = -padding;
-
-      // Create radial gradient for each orb
-      const gradient = ctx.createRadialGradient(
-        orb.x, orb.y, 0,
-        orb.x, orb.y, orb.radius
-      );
-      
-      // Shift hue slightly based on mouse position
-      const hueShift = (mx - 0.5) * 20;
-      const adjustedHue = (orb.hue + hueShift + 360) % 360;
-      
-      gradient.addColorStop(0, `hsla(${adjustedHue}, 80%, 55%, 0.8)`);
-      gradient.addColorStop(0.4, `hsla(${adjustedHue}, 70%, 45%, 0.4)`);
-      gradient.addColorStop(1, `hsla(${adjustedHue}, 60%, 35%, 0)`);
-
-      ctx.globalCompositeOperation = "screen";
-      ctx.fillStyle = gradient;
+    // Stars
+    starsRef.current.forEach(star => {
+      const twinkle = Math.sin(t * star.twinkleSpeed + star.twinkleOffset) * 0.3 + 0.7;
       ctx.beginPath();
-      ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200, 220, 255, ${star.opacity * twinkle})`;
       ctx.fill();
     });
 
-    // Add subtle noise/grain overlay
-    ctx.globalCompositeOperation = "overlay";
-    ctx.fillStyle = `rgba(128, 128, 128, 0.03)`;
-    for (let i = 0; i < 1000; i++) {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      ctx.fillRect(x, y, 1, 1);
-    }
+    // Clouds
+    cloudsRef.current.forEach(cloud => {
+      cloud.x += cloud.speed;
+      if (cloud.x - cloud.width > width) cloud.x = -cloud.width;
+      drawCloud(ctx, cloud);
+    });
 
-    ctx.globalCompositeOperation = "source-over";
+    // Jets
+    jetsRef.current.forEach(jet => {
+      jet.y += Math.sin(t * jet.altitude * 10) * 0.3;
+      jet.x += jet.speed;
+
+      jet.trail.unshift({ x: jet.x, y: jet.y });
+      if (jet.trail.length > jet.trailLength) jet.trail.pop();
+
+      if (jet.x > width + 300) {
+        jet.x = -300;
+        jet.y = height * (0.15 + Math.random() * 0.3);
+        jet.trail = [];
+      }
+
+      // Engine glow
+      const glowGrad = ctx.createRadialGradient(jet.x - jet.size * 2, jet.y, 0, jet.x - jet.size * 2, jet.y, jet.size * 2.5);
+      glowGrad.addColorStop(0, "rgba(255, 160, 60, 0.9)");
+      glowGrad.addColorStop(0.3, "rgba(255, 80, 20, 0.5)");
+      glowGrad.addColorStop(1, "rgba(255, 40, 0, 0)");
+      ctx.fillStyle = glowGrad;
+      ctx.beginPath();
+      ctx.ellipse(jet.x - jet.size * 2, jet.y, jet.size * 2.5, jet.size * 0.6, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Contrail
+      jet.trail.forEach((pt, i) => {
+        const alpha = (1 - i / jet.trail.length) * 0.18;
+        const trailWidth = (1 - i / jet.trail.length) * jet.size * 0.25;
+        ctx.beginPath();
+        ctx.arc(pt.x - jet.size * 1.8, pt.y, trailWidth, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200, 220, 255, ${alpha})`;
+        ctx.fill();
+      });
+
+      drawJet(ctx, jet.x, jet.y, jet.size);
+    });
 
     animationRef.current = requestAnimationFrame(animate);
-  }, [springX, springY]);
+  }, [drawJet, drawCloud]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -133,31 +241,18 @@ export function LiveWallpaper() {
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      initOrbs(canvas.width, canvas.height);
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-      mouseX.set(x);
-      mouseY.set(y);
-      mouseRef.current = { x, y };
+      initScene(canvas.width, canvas.height);
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
-    window.addEventListener("mousemove", handleMouseMove);
-    
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [animate, initOrbs, mouseX, mouseY]);
+  }, [animate, initScene]);
 
   return (
     <motion.canvas
@@ -165,7 +260,7 @@ export function LiveWallpaper() {
       className="fixed inset-0 -z-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1.5 }}
+      transition={{ duration: 2 }}
     />
   );
 }
