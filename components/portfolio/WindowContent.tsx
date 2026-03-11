@@ -279,6 +279,7 @@ export function AboutWindowContent() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          onClick={() => window.open("mailto:findkarthik7@yahoo.com")}
           className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-medium"
         >
           <Mail className="w-4 h-4" />
@@ -378,10 +379,10 @@ export function ContactWindowContent() {
       {/* Contact Methods */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { icon: <Mail className="w-5 h-5" />, label: "Email", value: "findkarthik7@yahoo.com", color: "from-blue-500 to-cyan-500" },
-          { icon: <Phone className="w-5 h-5" />, label: "Phone", value: "+91 7411530867", color: "from-green-500 to-emerald-500" },
-          { icon: <Linkedin className="w-5 h-5" />, label: "LinkedIn", value: "karthik-devaraj", color: "from-blue-600 to-blue-700" },
-          { icon: <Github className="w-5 h-5" />, label: "GitHub", value: "github.com/hemakarthik05", color: "from-gray-600 to-gray-700" },
+          { icon: <Mail className="w-5 h-5" />, label: "Email", value: "findkarthik7@yahoo.com", color: "from-blue-500 to-cyan-500", href: "mailto:findkarthik7@yahoo.com" },
+          { icon: <Phone className="w-5 h-5" />, label: "Phone", value: "+91 7411530867", color: "from-green-500 to-emerald-500", href: "tel:+917411530867" },
+          { icon: <Linkedin className="w-5 h-5" />, label: "LinkedIn", value: "karthik-devaraj", color: "from-blue-600 to-blue-700", href: "https://www.linkedin.com/in/karthik-devaraj-755241356/" },
+          { icon: <Github className="w-5 h-5" />, label: "GitHub", value: "Darkdemon75", color: "from-gray-600 to-gray-700", href: "https://github.com/Darkdemon75" },
         ].map((contact, i) => (
           <motion.div
             key={contact.label}
@@ -389,6 +390,7 @@ export function ContactWindowContent() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1 }}
             whileHover={{ scale: 1.02 }}
+            onClick={() => window.open(contact.href, "_blank")}
             className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 cursor-pointer"
           >
             <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${contact.color} flex items-center justify-center text-white`}>
@@ -705,7 +707,7 @@ export function TerminalWindowContent() {
     help: "Available commands:\n  about     - Learn about me\n  skills    - View my tech stack\n  contact   - Get contact info\n  projects  - See my projects\n  clear     - Clear terminal",
     about: "Karthik Devaraj\nData & IoT Engineering Intern\nBCA student at PES University, Bengaluru (2026)\nBuilding IoT systems, embedded solutions & data-driven apps.",
     skills: "Languages: Python, Embedded C, JavaScript, SQL, HTML/CSS\nIoT: Arduino, MQ Sensors, RFID, GSM Modules\nTools: MySQL, Git, VS Code, Excel",
-    contact: "Email: findkarthik7@yahoo.com\nPhone: +91 7411530867\nLinkedIn: linkedin.com/in/karthik-devaraj-755241356",
+    contact: "Email: findkarthik7@yahoo.com\nPhone: +91 7411530867\nLinkedIn: linkedin.com/in/karthik-devaraj-755241356\nGitHub: github.com/Darkdemon75",
     projects: "1. Garden Genie - IoT Plant Monitoring System\n2. Gas Leakage Detection & Emergency Alert System\n3. RFID-Based Hospital Management System\n4. Mimetic - AI Content Repurposing Platform\n5. Automated Smoke Detection & Alert System",
     clear: "__CLEAR__",
   };
