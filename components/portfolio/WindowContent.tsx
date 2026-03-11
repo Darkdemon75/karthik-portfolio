@@ -28,6 +28,10 @@ import {
   FileText,
   Award,
   Briefcase,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Video,
   GraduationCap,
   FolderKanban,
   User,
@@ -755,6 +759,204 @@ export function TerminalWindowContent() {
           />
         </form>
       </div>
+    </motion.div>
+  );
+}
+
+export function ScheduleWindowContent() {
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+  const getDaysInMonth = (month: number, year: number) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (month: number, year: number) => new Date(year, month, 1).getDay();
+
+  const prevMonth = () => {
+    if (currentMonth === 0) { setCurrentMonth(11); setCurrentYear(y => y - 1); }
+    else setCurrentMonth(m => m - 1);
+  };
+
+  const nextMonth = () => {
+    if (currentMonth === 11) { setCurrentMonth(0); setCurrentYear(y => y + 1); }
+    else setCurrentMonth(m => m + 1);
+  };
+
+  const isToday = (day: number) =>
+    day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+
+  const isPast = (day: number) => {
+    const d = new Date(currentYear, currentMonth, day);
+    d.setHours(0,0,0,0);
+    const t = new Date(); t.setHours(0,0,0,0);
+    return d < t;
+  };
+
+  const isSelected = (day: number) =>
+    selectedDate?.getDate() === day &&
+    selectedDate?.getMonth() === currentMonth &&
+    selectedDate?.getFullYear() === currentYear;
+
+  const isWeekend = (day: number) => {
+    const d = new Date(currentYear, currentMonth, day).getDay();
+    return d === 0 || d === 6;
+  };
+
+  const handleDayClick = (day: number) => {
+    if (isPast(day)) return;
+    setSelectedDate(new Date(currentYear, currentMonth, day));
+    setShowConfirm(false);
+  };
+
+  const handleSchedule = () => {
+    if (!selectedDate) return;
+    const dateStr = selectedDate.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+    const subject = encodeURIComponent(`Meeting Request - ${dateStr}`);
+    const body = encodeURIComponent(`Hi Karthik,\n\nI'd like to schedule a call with you on ${dateStr}.\n\nPlease let me know your availability.\n\nBest regards`);
+    window.open(`mailto:findkarthik7@yahoo.com?subject=${subject}&body=${body}`);
+    setShowConfirm(true);
+  };
+
+  const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+  const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
+  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-5"
+    >
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-bold text-foreground">Schedule a Call</h2>
+        <p className="text-muted-foreground mt-1">Pick a date and I'll get back to you to confirm!</p>
+      </div>
+
+      {/* Calendar */}
+      <div className="rounded-2xl bg-secondary/40 p-4">
+        {/* Month nav */}
+        <div className="flex items-center justify-between mb-4">
+          <motion.button
+            whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+            onClick={prevMonth}
+            className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </motion.button>
+          <h3 className="text-lg font-semibold text-foreground">
+            {monthNames[currentMonth]} {currentYear}
+          </h3>
+          <motion.button
+            whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+            onClick={nextMonth}
+            className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </motion.button>
+        </div>
+
+        {/* Day headers */}
+        <div className="grid grid-cols-7 mb-2">
+          {dayNames.map(d => (
+            <div key={d} className="text-center text-xs font-medium text-muted-foreground py-1">{d}</div>
+          ))}
+        </div>
+
+        {/* Days grid */}
+        <div className="grid grid-cols-7 gap-1">
+          {Array.from({ length: totalCells }).map((_, i) => {
+            const day = i - firstDay + 1;
+            const valid = day >= 1 && day <= daysInMonth;
+            if (!valid) return <div key={i} />;
+
+            const past = isPast(day);
+            const weekend = isWeekend(day);
+            const selected = isSelected(day);
+            const todayMark = isToday(day);
+
+            return (
+              <motion.button
+                key={i}
+                whileHover={!past ? { scale: 1.1 } : {}}
+                whileTap={!past ? { scale: 0.95 } : {}}
+                onClick={() => handleDayClick(day)}
+                disabled={past}
+                className={`
+                  aspect-square rounded-xl text-sm font-medium transition-all flex items-center justify-center
+                  ${selected ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" : ""}
+                  ${todayMark && !selected ? "ring-2 ring-primary text-primary" : ""}
+                  ${past ? "text-muted-foreground/30 cursor-not-allowed" : ""}
+                  ${!past && !selected && weekend ? "text-rose-400/70" : ""}
+                  ${!past && !selected && !weekend && !todayMark ? "text-foreground hover:bg-primary/20" : ""}
+                `}
+              >
+                {day}
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="flex gap-4 text-xs text-muted-foreground">
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full ring-2 ring-primary inline-block" /> Today</span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-primary inline-block" /> Selected</span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-rose-400/50 inline-block" /> Weekend</span>
+      </div>
+
+      {/* Selected date + schedule button */}
+      {selectedDate && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl bg-primary/10 border border-primary/20 p-4 space-y-3"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="font-semibold text-foreground">
+                {selectedDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+              </p>
+              <p className="text-sm text-muted-foreground flex items-center gap-1">
+                <Clock className="w-3 h-3" /> Time to be confirmed over email
+              </p>
+            </div>
+          </div>
+
+          {showConfirm ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center gap-2 text-sm text-green-400 font-medium"
+            >
+              ✅ Email opened! Karthik will confirm the time shortly.
+            </motion.div>
+          ) : (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleSchedule}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-medium"
+            >
+              <Video className="w-4 h-4" />
+              Schedule a Call on this Date
+            </motion.button>
+          )}
+        </motion.div>
+      )}
+
+      {!selectedDate && (
+        <p className="text-center text-sm text-muted-foreground py-2">
+          👆 Click any available date to schedule a call
+        </p>
+      )}
     </motion.div>
   );
 }

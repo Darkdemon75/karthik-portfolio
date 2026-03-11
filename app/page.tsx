@@ -15,6 +15,7 @@ import {
   ResumeWindowContent,
   TerminalWindowContent,
   NotesWindowContent,
+  ScheduleWindowContent,
 } from "@/components/portfolio/WindowContent";
 
 interface Project {
@@ -227,6 +228,7 @@ export default function PortfolioPage() {
         >
           {window.type === "notes" && <NotesWindowContent />}
           {window.type === "project" && <ProjectWindowContent project={window.project} />}
+          {window.type === "schedule" && <ScheduleWindowContent />}
           {window.type === "about" && <AboutWindowContent />}
           {window.type === "stack" && <StackWindowContent />}
           {window.type === "contact" && <ContactWindowContent />}
