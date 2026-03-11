@@ -1,0 +1,753 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import {
+  Github,
+  ExternalLink,
+  Mail,
+  MapPin,
+  Calendar,
+  Code2,
+  Layers,
+  Zap,
+  Globe,
+  Database,
+  Palette,
+  Server,
+  Smartphone,
+  TestTube,
+  Cloud,
+  Lock,
+  Terminal,
+  Download,
+  Send,
+  Linkedin,
+  Twitter,
+  Phone,
+  FileText,
+  Award,
+  Briefcase,
+  GraduationCap,
+  FolderKanban,
+  User,
+} from "lucide-react";
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  color: string;
+  icon: React.ReactNode;
+}
+
+const defaultProjects = [
+  {
+    id: "garden-genie",
+    title: "Garden Genie - IoT Plant Monitoring",
+    description: "Intelligent urban gardening solution with real-time sensor-based plant health monitoring and AI chatbot",
+    tags: ["Arduino", "IoT", "Mobile App", "Sensors"],
+    color: "from-emerald-500 to-green-600",
+  },
+  {
+    id: "gas-detection",
+    title: "Gas Leakage Detection System",
+    description: "Automated gas detection system with GSM-based IVR alerts and real-time LCD monitoring",
+    tags: ["Arduino", "MQ Sensors", "GSM", "Embedded C"],
+    color: "from-red-500 to-orange-600",
+  },
+  {
+    id: "rfid-hospital",
+    title: "RFID Hospital Management",
+    description: "Patient identification and tracking system with automated medical record retrieval",
+    tags: ["RFID", "Arduino", "SQL", "Database"],
+    color: "from-blue-500 to-cyan-600",
+  },
+  {
+    id: "mimetic",
+    title: "Mimetic - AI Content Platform",
+    description: "AI-powered content repurposing platform for digital creators - CIE Ignite Stage 2 Shortlisted",
+    tags: ["HTML5", "CSS3", "JavaScript", "UI/UX"],
+    color: "from-violet-500 to-purple-600",
+  },
+  {
+    id: "smoke-detection",
+    title: "Automated Smoke Detection",
+    description: "Early fire hazard warning system using MQ2 sensor with threshold-based alerts",
+    tags: ["Arduino Uno", "MQ2 Sensor", "Embedded C"],
+    color: "from-amber-500 to-red-600",
+  },
+];
+
+export function ProjectWindowContent({ project }: { project?: Project }) {
+  // If no specific project, show projects gallery
+  if (!project) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-6"
+      >
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">Projects</h2>
+          <p className="text-muted-foreground mt-1">A selection of my recent work</p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
+          {defaultProjects.map((proj, i) => (
+            <motion.div
+              key={proj.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              whileHover={{ scale: 1.02 }}
+              className="p-4 rounded-xl bg-secondary/50 cursor-pointer group"
+            >
+              <div className="flex items-start gap-4">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${proj.color} flex items-center justify-center text-white shadow-lg`}>
+                  <Layers className="w-6 h-6" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">{proj.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{proj.description}</p>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {proj.tags.map((tag) => (
+                      <span key={tag} className="px-2 py-1 rounded-md text-xs font-medium bg-primary/20 text-primary">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <ExternalLink className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      {/* Header */}
+      <div className="flex items-start gap-4">
+        <div
+          className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center text-white shadow-lg`}
+        >
+          {project.icon}
+        </div>
+        <div className="flex-1">
+          <h2 className="text-2xl font-bold text-foreground">{project.title}</h2>
+          <p className="text-muted-foreground mt-1">{project.description}</p>
+        </div>
+      </div>
+
+      {/* Tags */}
+      <div className="flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <span
+            key={tag}
+            className="px-3 py-1.5 rounded-lg text-sm font-medium bg-secondary text-secondary-foreground"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      {/* Features */}
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-foreground">Key Features</h3>
+        <ul className="space-y-2">
+          {[
+            "Responsive design optimized for all devices",
+            "Real-time data synchronization",
+            "Comprehensive analytics dashboard",
+            "Role-based access control",
+          ].map((feature, i) => (
+            <motion.li
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="flex items-center gap-2 text-foreground/80"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+              {feature}
+            </motion.li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3 pt-4">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-medium"
+        >
+          <ExternalLink className="w-4 h-4" />
+          Live Demo
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary text-secondary-foreground font-medium"
+        >
+          <Github className="w-4 h-4" />
+          Source Code
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+}
+
+export function AboutWindowContent() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      {/* Profile Header */}
+      <div className="flex items-start gap-6">
+        <motion.div
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-3xl font-bold text-primary-foreground shadow-xl"
+        >
+          KD
+        </motion.div>
+        <div className="flex-1">
+          <h2 className="text-3xl font-bold text-foreground">Karthik Devaraj</h2>
+          <p className="text-lg text-primary mt-1">Data & IoT Engineering Intern</p>
+          <div className="flex flex-wrap gap-4 mt-3 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <MapPin className="w-4 h-4" />
+              Bengaluru, Karnataka
+            </span>
+            <span className="flex items-center gap-1">
+              <GraduationCap className="w-4 h-4" />
+              PES University (2026)
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Bio */}
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-foreground">About Me</h3>
+        <p className="text-foreground/80 leading-relaxed">
+          {`Computer Applications student with hands-on experience in IoT systems, embedded programming, and web development. 
+          Proven ability to build functional prototypes including gas detection systems, RFID-based hospital management, 
+          and IoT plant monitoring solutions. Passionate about creating data-driven solutions and automation.`}
+        </p>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: "Projects", value: "5+" },
+          { label: "Distinctions", value: "3" },
+          { label: "Events", value: "35+" },
+        ].map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="text-center p-4 rounded-xl bg-secondary/50"
+          >
+            <div className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              {stat.value}
+            </div>
+            <div className="text-sm text-muted-foreground">{stat.label}</div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Contact */}
+      <div className="flex gap-3 pt-4">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-medium"
+        >
+          <Mail className="w-4 h-4" />
+          Contact Me
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => window.open("https://www.linkedin.com/in/karthik-devaraj-755241356/", "_blank")}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary text-secondary-foreground font-medium"
+        >
+          <Linkedin className="w-4 h-4" />
+          LinkedIn
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+}
+
+const fullTechStack = [
+  { category: "Programming Languages", items: [
+    { name: "Python", icon: <Terminal className="w-4 h-4" /> },
+    { name: "Embedded C", icon: <Code2 className="w-4 h-4" /> },
+    { name: "JavaScript", icon: <Zap className="w-4 h-4" /> },
+    { name: "SQL", icon: <Database className="w-4 h-4" /> },
+  ]},
+  { category: "Embedded Systems & IoT", items: [
+    { name: "Arduino", icon: <Layers className="w-4 h-4" /> },
+    { name: "MQ Sensors", icon: <Server className="w-4 h-4" /> },
+    { name: "RFID (RC522)", icon: <Globe className="w-4 h-4" /> },
+    { name: "GSM Modules", icon: <Smartphone className="w-4 h-4" /> },
+  ]},
+  { category: "Web & Tools", items: [
+    { name: "HTML5 / CSS3", icon: <Palette className="w-4 h-4" /> },
+    { name: "MySQL", icon: <Database className="w-4 h-4" /> },
+    { name: "Git / VS Code", icon: <Terminal className="w-4 h-4" /> },
+    { name: "UI/UX Design", icon: <Layers className="w-4 h-4" /> },
+  ]},
+];
+
+export function StackWindowContent() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      <div>
+        <h2 className="text-2xl font-bold text-foreground">Tech Stack</h2>
+        <p className="text-muted-foreground mt-1">
+          Technologies I use to bring ideas to life
+        </p>
+      </div>
+
+      {fullTechStack.map((category, categoryIndex) => (
+        <div key={category.category} className="space-y-3">
+          <h3 className="text-lg font-semibold text-foreground">{category.category}</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {category.items.map((tech, i) => (
+              <motion.div
+                key={tech.name}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: categoryIndex * 0.1 + i * 0.05 }}
+                whileHover={{ scale: 1.02 }}
+                className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 cursor-pointer"
+              >
+                <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+                  {tech.icon}
+                </div>
+                <span className="font-medium text-foreground">{tech.name}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
+export function ContactWindowContent() {
+  const [formState, setFormState] = useState({ name: "", email: "", message: "" });
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      <div>
+        <h2 className="text-2xl font-bold text-foreground">Get in Touch</h2>
+        <p className="text-muted-foreground mt-1">
+          {`I'd love to hear from you. Send me a message!`}
+        </p>
+      </div>
+
+      {/* Contact Methods */}
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          { icon: <Mail className="w-5 h-5" />, label: "Email", value: "findkarthik7@yahoo.com", color: "from-blue-500 to-cyan-500" },
+          { icon: <Phone className="w-5 h-5" />, label: "Phone", value: "+91 7411530867", color: "from-green-500 to-emerald-500" },
+          { icon: <Linkedin className="w-5 h-5" />, label: "LinkedIn", value: "karthik-devaraj", color: "from-blue-600 to-blue-700" },
+          { icon: <Github className="w-5 h-5" />, label: "GitHub", value: "github.com/hemakarthik05", color: "from-gray-600 to-gray-700" },
+        ].map((contact, i) => (
+          <motion.div
+            key={contact.label}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.1 }}
+            whileHover={{ scale: 1.02 }}
+            className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 cursor-pointer"
+          >
+            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${contact.color} flex items-center justify-center text-white`}>
+              {contact.icon}
+            </div>
+            <div>
+              <div className="text-xs text-muted-foreground">{contact.label}</div>
+              <div className="text-sm font-medium text-foreground">{contact.value}</div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Contact Form */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-foreground">Send a Message</h3>
+        <div className="space-y-3">
+          <input
+            type="text"
+            placeholder="Your name"
+            value={formState.name}
+            onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+            className="w-full px-4 py-3 rounded-xl bg-secondary/50 border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          <input
+            type="email"
+            placeholder="Your email"
+            value={formState.email}
+            onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+            className="w-full px-4 py-3 rounded-xl bg-secondary/50 border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          <textarea
+            placeholder="Your message"
+            rows={4}
+            value={formState.message}
+            onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+            className="w-full px-4 py-3 rounded-xl bg-secondary/50 border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+          />
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-medium"
+          >
+            <Send className="w-4 h-4" />
+            Send Message
+          </motion.button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export function ResumeWindowContent() {
+  const experience = [
+    { title: "Freelance Event Coordinator", company: "Paytm Insider (District by Zomato)", period: "Oct 2024 - Nov 2025", description: "Coordinated 35+ large-scale live events with 10,000+ attendees. Managed ticketing systems and box-office operations achieving 99%+ transaction accuracy." },
+  ];
+
+  const education = [
+    { degree: "Bachelor of Computer Applications (BCA)", school: "PES University, RR Campus, Bengaluru", year: "2026" },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">Resume</h2>
+          <p className="text-muted-foreground mt-1">My professional journey</p>
+        </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-medium"
+        >
+          <Download className="w-4 h-4" />
+          Download PDF
+        </motion.button>
+      </div>
+
+      {/* Experience */}
+      <div className="space-y-4">
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+          <Briefcase className="w-5 h-5 text-primary" />
+          Experience
+        </h3>
+        <div className="space-y-4">
+          {experience.map((exp, i) => (
+            <motion.div
+              key={exp.title}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="p-4 rounded-xl bg-secondary/50 border-l-2 border-primary"
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="font-semibold text-foreground">{exp.title}</h4>
+                  <p className="text-sm text-primary">{exp.company}</p>
+                </div>
+                <span className="text-xs text-muted-foreground">{exp.period}</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-2">{exp.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Education */}
+      <div className="space-y-4">
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+          <GraduationCap className="w-5 h-5 text-accent" />
+          Education
+        </h3>
+        <div className="space-y-3">
+          {education.map((edu, i) => (
+            <motion.div
+              key={edu.degree}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 + i * 0.1 }}
+              className="flex items-center justify-between p-4 rounded-xl bg-secondary/50"
+            >
+              <div>
+                <h4 className="font-semibold text-foreground">{edu.degree}</h4>
+                <p className="text-sm text-muted-foreground">{edu.school}</p>
+              </div>
+              <span className="text-sm text-primary font-medium">{edu.year}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Certifications */}
+      <div className="space-y-4">
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+          <Award className="w-5 h-5 text-chart-4" />
+          Certifications & Achievements
+        </h3>
+        <div className="space-y-3">
+          {[
+            { name: "Academic Distinction Awardee", org: "PES University — Semester 1, 4 & 5" },
+            { name: "PESU I/O – Automation in IoT", org: "PES University" },
+            { name: "Front-End Web Development", org: "Udemy" },
+            { name: "CIE Ignite Innovation – Stage 2", org: "PES University (Top 200+ submissions)" },
+          ].map((cert, i) => (
+            <motion.div
+              key={cert.name}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 + i * 0.1 }}
+              className="flex items-center justify-between p-3 rounded-xl bg-secondary/50"
+            >
+              <div>
+                <h4 className="font-semibold text-foreground text-sm">{cert.name}</h4>
+                <p className="text-xs text-muted-foreground">{cert.org}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Skills Summary */}
+      <div className="space-y-3">
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-foreground">
+          <Award className="w-5 h-5 text-chart-4" />
+          Key Skills
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {["Python", "Embedded C", "Arduino", "JavaScript", "HTML/CSS", "SQL", "IoT Systems", "Git"].map((skill) => (
+            <span key={skill} className="px-3 py-1.5 rounded-lg text-sm font-medium bg-primary/20 text-primary">
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export function NotesWindowContent() {
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      setCurrentTime(now.toLocaleDateString('en-US', options));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      {/* Header with paper texture feel */}
+      <div className="relative">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-1"
+        >
+          <p className="text-sm text-muted-foreground font-medium">{currentTime}</p>
+          <h2 className="text-3xl font-bold text-foreground">
+            Hello there!
+          </h2>
+        </motion.div>
+      </div>
+
+      {/* Greeting Message */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="space-y-4"
+      >
+        <p className="text-lg text-foreground/90 leading-relaxed">
+          {`Welcome to my digital workspace. I'm `}
+          <span className="font-semibold text-primary">Karthik Devaraj</span>
+          {`, a Data & IoT Engineering Intern passionate about building smart embedded systems and data-driven solutions.`}
+        </p>
+        
+        <p className="text-foreground/80 leading-relaxed">
+          {`This portfolio is designed to feel like a desktop operating system. Feel free to explore by clicking on the dock icons below or navigating through the menu bar above.`}
+        </p>
+      </motion.div>
+
+      {/* Quick Actions */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="space-y-3"
+      >
+        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Quick Start</h3>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: "View Projects", icon: <FolderKanban className="w-4 h-4" />, color: "from-violet-500 to-purple-600" },
+            { label: "About Me", icon: <User className="w-4 h-4" />, color: "from-cyan-500 to-blue-600" },
+            { label: "Tech Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600" },
+            { label: "Get in Touch", icon: <Mail className="w-4 h-4" />, color: "from-teal-500 to-cyan-600" },
+          ].map((action, i) => (
+            <motion.div
+              key={action.label}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 + i * 0.1 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 cursor-pointer group"
+            >
+              <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center text-white shadow-md`}>
+                {action.icon}
+              </div>
+              <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                {action.label}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Tip */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="p-4 rounded-xl bg-primary/10 border border-primary/20"
+      >
+        <p className="text-sm text-foreground/80">
+          <span className="font-semibold text-primary">Tip:</span>
+          {` Try the keyboard shortcuts! Press `}
+          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-xs font-mono">Ctrl+P</kbd>
+          {` for Projects, `}
+          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-xs font-mono">Ctrl+A</kbd>
+          {` for About, or `}
+          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-xs font-mono">Ctrl+T</kbd>
+          {` for Terminal.`}
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export function TerminalWindowContent() {
+  const [input, setInput] = useState("");
+  const [history, setHistory] = useState<Array<{ command: string; output: string }>>([
+    { command: "", output: "Welcome to Jane's Terminal v1.0.0\nType 'help' for available commands.\n" },
+  ]);
+
+  const commands: Record<string, string> = {
+    help: "Available commands:\n  about     - Learn about me\n  skills    - View my tech stack\n  contact   - Get contact info\n  projects  - See my projects\n  clear     - Clear terminal",
+    about: "Karthik Devaraj\nData & IoT Engineering Intern\nBCA student at PES University, Bengaluru (2026)\nBuilding IoT systems, embedded solutions & data-driven apps.",
+    skills: "Languages: Python, Embedded C, JavaScript, SQL, HTML/CSS\nIoT: Arduino, MQ Sensors, RFID, GSM Modules\nTools: MySQL, Git, VS Code, Excel",
+    contact: "Email: findkarthik7@yahoo.com\nPhone: +91 7411530867\nLinkedIn: linkedin.com/in/karthik-devaraj-755241356",
+    projects: "1. Garden Genie - IoT Plant Monitoring System\n2. Gas Leakage Detection & Emergency Alert System\n3. RFID-Based Hospital Management System\n4. Mimetic - AI Content Repurposing Platform\n5. Automated Smoke Detection & Alert System",
+    clear: "__CLEAR__",
+  };
+
+  const handleCommand = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cmd = input.toLowerCase().trim();
+    
+    if (cmd === "clear") {
+      setHistory([]);
+    } else {
+      const output = commands[cmd] || `Command not found: ${cmd}. Type 'help' for available commands.`;
+      setHistory([...history, { command: input, output }]);
+    }
+    setInput("");
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="font-mono text-sm"
+    >
+      <div className="bg-black/50 rounded-lg p-4 min-h-[300px] max-h-[400px] overflow-y-auto">
+        {history.map((entry, i) => (
+          <div key={i} className="mb-2">
+            {entry.command && (
+              <div className="flex items-center gap-2 text-green-400">
+                <span className="text-blue-400">karthik@portfolio</span>
+                <span className="text-white">:</span>
+                <span className="text-purple-400">~</span>
+                <span className="text-white">$</span>
+                <span className="text-foreground">{entry.command}</span>
+              </div>
+            )}
+            <pre className="text-foreground/80 whitespace-pre-wrap ml-0">{entry.output}</pre>
+          </div>
+        ))}
+        
+        <form onSubmit={handleCommand} className="flex items-center gap-2 text-green-400">
+          <span className="text-blue-400">karthik@portfolio</span>
+          <span className="text-white">:</span>
+          <span className="text-purple-400">~</span>
+          <span className="text-white">$</span>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-1 bg-transparent text-foreground outline-none"
+            autoFocus
+          />
+        </form>
+      </div>
+    </motion.div>
+  );
+}
