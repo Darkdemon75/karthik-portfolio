@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { MountainWallpaper } from "@/components/portfolio/MountainWallpaper";
+import { LiveWallpaper } from "@/components/portfolio/LiveWallpaper";
 import { MenuBar } from "@/components/portfolio/MenuBar";
 import { Dock } from "@/components/portfolio/Dock";
 import { DraggableWindow } from "@/components/portfolio/DraggableWindow";
@@ -207,7 +207,7 @@ export default function PortfolioPage() {
       <CustomCursor />
 
       {/* Mountain Wallpaper - Clean Desktop */}
-      <MountainWallpaper />
+      <LiveWallpaper />
 
       {/* macOS-style Menu Bar */}
       <MenuBar onNavigate={handleMenuNavigate} />

@@ -439,7 +439,7 @@ export function ContactWindowContent() {
 
 export function ResumeWindowContent() {
   const experience = [
-    { title: "Intelligence Analyst Intern", company: "Consuma AI", period: "2024 - Present", description: "Conducting market research and competitive intelligence analysis across industry verticals. Building structured reports and data-driven insights for clients to support strategic decision-making." },
+    { title: "Intelligence Analyst Intern", company: "Consuma AI", period: "Feb 2026 - Present", description: "Conducting market research and competitive intelligence analysis across industry verticals. Building structured reports and data-driven insights for clients to support strategic decision-making." },
     { title: "Freelance Event Coordinator", company: "Paytm Insider (District by Zomato)", period: "Oct 2024 - Nov 2025", description: "Coordinated 35+ large-scale live events with 10,000+ attendees. Managed ticketing systems and box-office operations achieving 99%+ transaction accuracy." },
   ];
 
