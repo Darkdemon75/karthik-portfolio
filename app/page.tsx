@@ -194,7 +194,7 @@ export default function PortfolioPage() {
       <CustomCursor cursorStyle={cursorStyle} />
 
       {/* Wallpaper */}
-      {wallpaper === "mountain" ? <LiveWallpaper /> : <OceanWallpaper />}
+      {wallpaper === "mountain" ? <LiveWallpaper theme={theme} /> : <OceanWallpaper theme={theme} />}
 
       <MenuBar onNavigate={handleMenuNavigate} clockFormat={clockFormat} />
 
