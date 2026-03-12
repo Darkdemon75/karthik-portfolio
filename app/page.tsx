@@ -226,7 +226,7 @@ export default function PortfolioPage() {
           zIndex={window.zIndex}
           layoutId={`window-${window.id}`}
         >
-          {window.type === "notes" && <NotesWindowContent />}
+          {window.type === "notes" && <NotesWindowContent onNavigate={handleDockClick} />}
           {window.type === "project" && <ProjectWindowContent project={window.project} />}
           {window.type === "schedule" && <ScheduleWindowContent />}
           {window.type === "about" && <AboutWindowContent />}

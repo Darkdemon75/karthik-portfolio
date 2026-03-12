@@ -580,7 +580,7 @@ export function ResumeWindowContent() {
   );
 }
 
-export function NotesWindowContent() {
+export function NotesWindowContent({ onNavigate }: { onNavigate?: (section: string) => void }) {
   const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
@@ -650,10 +650,10 @@ export function NotesWindowContent() {
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Quick Start</h3>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { label: "View Projects", icon: <FolderKanban className="w-4 h-4" />, color: "from-violet-500 to-purple-600" },
-            { label: "About Me", icon: <User className="w-4 h-4" />, color: "from-cyan-500 to-blue-600" },
-            { label: "Tech Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600" },
-            { label: "Get in Touch", icon: <Mail className="w-4 h-4" />, color: "from-teal-500 to-cyan-600" },
+            { label: "View Projects", icon: <FolderKanban className="w-4 h-4" />, color: "from-violet-500 to-purple-600", action: "projects" },
+            { label: "About Me", icon: <User className="w-4 h-4" />, color: "from-cyan-500 to-blue-600", action: "about" },
+            { label: "Tech Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600", action: "stack" },
+            { label: "Get in Touch", icon: <Mail className="w-4 h-4" />, color: "from-teal-500 to-cyan-600", action: "contact" },
           ].map((action, i) => (
             <motion.div
               key={action.label}
@@ -662,6 +662,7 @@ export function NotesWindowContent() {
               transition={{ delay: 0.5 + i * 0.1 }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
+              onClick={() => onNavigate?.(action.action)}
               className="flex items-center gap-3 p-3 rounded-xl bg-secondary/50 cursor-pointer group"
             >
               <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center text-white shadow-md`}>
