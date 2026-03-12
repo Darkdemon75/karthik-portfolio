@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react";
 
 interface MenuBarProps {
   onNavigate?: (section: string) => void;
+  clockFormat?: "12h" | "24h";
 }
 
 const menuItems = [
@@ -58,7 +59,7 @@ const menuItems = [
   },
 ];
 
-export function MenuBar({ onNavigate }: MenuBarProps) {
+export function MenuBar({ onNavigate, clockFormat = "12h" }: MenuBarProps) {
   const [time, setTime] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -76,7 +77,7 @@ export function MenuBar({ onNavigate }: MenuBarProps) {
         now.toLocaleTimeString("en-US", {
           hour: "numeric",
           minute: "2-digit",
-          hour12: true,
+          hour12: clockFormat === "12h",
         })
       );
       setDate(
@@ -90,8 +91,9 @@ export function MenuBar({ onNavigate }: MenuBarProps) {
 
     updateTime();
     const interval = setInterval(updateTime, 1000);
+    // re-run when format changes — handled by effect dependency
     return () => clearInterval(interval);
-  }, []);
+  }, [clockFormat]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

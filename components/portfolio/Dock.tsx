@@ -123,13 +123,13 @@ export function Dock({ onItemClick, activeItems = [] }: DockProps) {
         <div className="w-px h-12 bg-white/10 mx-2 self-center rounded-full" />
 
         {/* Settings */}
-        <DockIcon 
+        <DockIcon
           item={{ icon: Settings, label: "Settings", action: "settings", color: "from-gray-400 via-gray-500 to-gray-600" }}
           mouseX={mouseX}
           isActive={false}
           onHover={setHoveredItem}
           hoveredItem={hoveredItem}
-          onClick={() => {}}
+          onClick={() => onItemClick && onItemClick("settings")}
         />
       </motion.div>
     </motion.div>

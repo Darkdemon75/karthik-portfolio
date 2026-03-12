@@ -963,3 +963,148 @@ export function ScheduleWindowContent() {
     </motion.div>
   );
 }
+
+interface SettingsProps {
+  theme: "dark" | "light";
+  wallpaper: "mountain" | "ocean";
+  clockFormat: "12h" | "24h";
+  cursorStyle: "default" | "dot" | "ring" | "crosshair";
+  onThemeChange: (t: "dark" | "light") => void;
+  onWallpaperChange: (w: "mountain" | "ocean") => void;
+  onClockFormatChange: (f: "12h" | "24h") => void;
+  onCursorStyleChange: (c: "default" | "dot" | "ring" | "crosshair") => void;
+}
+
+export function SettingsWindowContent({
+  theme, wallpaper, clockFormat, cursorStyle,
+  onThemeChange, onWallpaperChange, onClockFormatChange, onCursorStyleChange,
+}: SettingsProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6 p-1"
+    >
+      <div className="flex items-center gap-3 pb-2 border-b border-white/10">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center text-lg">⚙️</div>
+        <div>
+          <h2 className="text-lg font-bold text-foreground">System Preferences</h2>
+          <p className="text-xs text-muted-foreground">Personalise your experience</p>
+        </div>
+      </div>
+
+      {/* Appearance */}
+      <div className="space-y-3">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Appearance</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {(["dark", "light"] as const).map(t => (
+            <motion.button
+              key={t}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onThemeChange(t)}
+              className={`p-3 rounded-xl border text-sm font-medium flex items-center gap-2 transition-all ${
+                theme === t
+                  ? "border-primary bg-primary/20 text-primary"
+                  : "border-white/10 bg-secondary/40 text-foreground/70 hover:bg-secondary/60"
+              }`}
+            >
+              <span>{t === "dark" ? "🌙" : "☀️"}</span>
+              <span className="capitalize">{t} Mode</span>
+              {theme === t && <span className="ml-auto text-primary">✓</span>}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Wallpaper */}
+      <div className="space-y-3">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Wallpaper</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {([
+            { id: "mountain", label: "Mountain Space", emoji: "🏔️" },
+            { id: "ocean", label: "Deep Ocean", emoji: "🌊" },
+          ] as const).map(w => (
+            <motion.button
+              key={w.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onWallpaperChange(w.id)}
+              className={`p-3 rounded-xl border text-sm font-medium flex items-center gap-2 transition-all ${
+                wallpaper === w.id
+                  ? "border-primary bg-primary/20 text-primary"
+                  : "border-white/10 bg-secondary/40 text-foreground/70 hover:bg-secondary/60"
+              }`}
+            >
+              <span className="text-lg">{w.emoji}</span>
+              <span>{w.label}</span>
+              {wallpaper === w.id && <span className="ml-auto text-primary">✓</span>}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Clock Format */}
+      <div className="space-y-3">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Clock Format</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {([
+            { id: "12h", label: "12-Hour", example: "2:30 PM" },
+            { id: "24h", label: "24-Hour", example: "14:30" },
+          ] as const).map(f => (
+            <motion.button
+              key={f.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onClockFormatChange(f.id)}
+              className={`p-3 rounded-xl border text-sm font-medium flex flex-col items-start gap-0.5 transition-all ${
+                clockFormat === f.id
+                  ? "border-primary bg-primary/20 text-primary"
+                  : "border-white/10 bg-secondary/40 text-foreground/70 hover:bg-secondary/60"
+              }`}
+            >
+              <div className="flex items-center gap-2 w-full">
+                <span>🕐</span>
+                <span>{f.label}</span>
+                {clockFormat === f.id && <span className="ml-auto text-primary">✓</span>}
+              </div>
+              <span className="text-xs opacity-60 pl-6">{f.example}</span>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Cursor Style */}
+      <div className="space-y-3">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Cursor Style</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {([
+            { id: "default", label: "Default", desc: "White dot + ring" },
+            { id: "dot", label: "Minimal Dot", desc: "Small blue dot" },
+            { id: "ring", label: "Ring Only", desc: "Hollow circle" },
+            { id: "crosshair", label: "Crosshair", desc: "Precision cross" },
+          ] as const).map(c => (
+            <motion.button
+              key={c.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onCursorStyleChange(c.id)}
+              className={`p-3 rounded-xl border text-sm font-medium flex flex-col items-start gap-0.5 transition-all ${
+                cursorStyle === c.id
+                  ? "border-primary bg-primary/20 text-primary"
+                  : "border-white/10 bg-secondary/40 text-foreground/70 hover:bg-secondary/60"
+              }`}
+            >
+              <div className="flex items-center gap-2 w-full">
+                <span>🖱️</span>
+                <span>{c.label}</span>
+                {cursorStyle === c.id && <span className="ml-auto text-primary">✓</span>}
+              </div>
+              <span className="text-xs opacity-60 pl-6">{c.desc}</span>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
