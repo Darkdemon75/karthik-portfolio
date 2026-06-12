@@ -138,7 +138,9 @@ export function MenuBar({ onNavigate, clockFormat = "12h" }: MenuBarProps) {
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className="fixed top-0 inset-x-0 z-50 glass h-7 px-4 flex items-center justify-between text-[13px] select-none"
+        className={`fixed top-0 inset-x-0 glass h-7 px-4 flex items-center justify-between text-[13px] select-none ${
+          activeMenu || showControlCenter || showSpotlight ? "z-[200]" : "z-50"
+        }`}
       >
         {/* Left Section */}
         <div className="flex items-center gap-1">
@@ -381,7 +383,7 @@ export function MenuBar({ onNavigate, clockFormat = "12h" }: MenuBarProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/40 z-[60]"
+              className="fixed inset-0 bg-black/40 z-[190]"
               onClick={() => setShowSpotlight(false)}
             />
             <motion.div
@@ -389,7 +391,7 @@ export function MenuBar({ onNavigate, clockFormat = "12h" }: MenuBarProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="fixed top-[20%] left-1/2 -translate-x-1/2 z-[70] w-[90%] max-w-[600px]"
+              className="fixed top-[20%] left-1/2 -translate-x-1/2 z-[200] w-[90%] max-w-[600px]"
             >
               <div className="glass-window rounded-2xl overflow-hidden shadow-2xl">
                 <div className="flex items-center gap-3 p-4 border-b border-white/10">
