@@ -137,7 +137,7 @@ export default function PortfolioPage() {
       notes: { type: "notes", title: "Notes" },
       about: { type: "about", title: "About Me" },
       projects: { type: "project", title: "Projects" },
-      stack: { type: "stack", title: "Tech Stack" },
+      stack: { type: "stack", title: "Skills Stack" },
       contact: { type: "contact", title: "Contact" },
       resume: { type: "resume", title: "Resume" },
       terminal: { type: "terminal", title: "Terminal" },
@@ -175,7 +175,7 @@ export default function PortfolioPage() {
         switch (e.key.toLowerCase()) {
           case "a": e.preventDefault(); openWindow("about", "About Me"); break;
           case "p": e.preventDefault(); openWindow("project", "Projects"); break;
-          case "s": e.preventDefault(); openWindow("stack", "Tech Stack"); break;
+          case "s": e.preventDefault(); openWindow("stack", "Skills Stack"); break;
           case "c": e.preventDefault(); openWindow("contact", "Contact"); break;
           case "t": e.preventDefault(); openWindow("terminal", "Terminal"); break;
         }
