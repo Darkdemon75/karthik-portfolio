@@ -831,45 +831,44 @@ export function ScheduleWindowContent() {
   const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
   const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
 
-  return (
-    <motion.div
+  return (<motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-5"
+      className="space-y-3"
     >
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Schedule a Call</h2>
-        <p className="text-muted-foreground mt-1">Pick a date and I'll get back to you to confirm!</p>
+        <h2 className="text-xl font-bold text-foreground">Schedule a Call</h2>
+        <p className="text-sm text-muted-foreground mt-0.5">Pick a date and I'll get back to you to confirm!</p>
       </div>
 
       {/* Calendar */}
-      <div className="rounded-2xl bg-secondary/40 p-4">
+      <div className="rounded-2xl bg-secondary/40 p-3">
         {/* Month nav */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-2">
           <motion.button
             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
             onClick={prevMonth}
-            className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors"
+            className="w-7 h-7 rounded-lg bg-secondary flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
           </motion.button>
-          <h3 className="text-lg font-semibold text-foreground">
+          <h3 className="text-base font-semibold text-foreground">
             {monthNames[currentMonth]} {currentYear}
           </h3>
           <motion.button
             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
             onClick={nextMonth}
-            className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors"
+            className="w-7 h-7 rounded-lg bg-secondary flex items-center justify-center text-foreground hover:bg-primary/20 transition-colors"
           >
             <ChevronRight className="w-4 h-4" />
           </motion.button>
         </div>
 
         {/* Day headers */}
-        <div className="grid grid-cols-7 mb-2">
+        <div className="grid grid-cols-7 mb-1">
           {dayNames.map(d => (
-            <div key={d} className="text-center text-xs font-medium text-muted-foreground py-1">{d}</div>
+            <div key={d} className="text-center text-xs font-medium text-muted-foreground py-0.5">{d}</div>
           ))}
         </div>
 
@@ -893,7 +892,7 @@ export function ScheduleWindowContent() {
                 onClick={() => handleDayClick(day)}
                 disabled={past}
                 className={`
-                  aspect-square rounded-xl text-sm font-medium transition-all flex items-center justify-center
+                  aspect-square rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center justify-center
                   ${selected ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" : ""}
                   ${todayMark && !selected ? "ring-2 ring-primary text-primary" : ""}
                   ${past ? "text-muted-foreground/30 cursor-not-allowed" : ""}
@@ -909,10 +908,10 @@ export function ScheduleWindowContent() {
       </div>
 
       {/* Legend */}
-      <div className="flex gap-4 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full ring-2 ring-primary inline-block" /> Today</span>
-        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-primary inline-block" /> Selected</span>
-        <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-rose-400/50 inline-block" /> Weekend</span>
+      <div className="flex gap-3 text-xs text-muted-foreground">
+        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full ring-2 ring-primary inline-block" /> Today</span>
+        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-primary inline-block" /> Selected</span>
+        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-400/50 inline-block" /> Weekend</span>
       </div>
 
       {/* Selected date + schedule button */}
@@ -920,17 +919,17 @@ export function ScheduleWindowContent() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl bg-primary/10 border border-primary/20 p-4 space-y-3"
+          className="rounded-2xl bg-primary/10 border border-primary/20 p-3 space-y-2"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
               <Calendar className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <p className="font-semibold text-foreground">
+              <p className="font-semibold text-foreground text-sm">
                 {selectedDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
               </p>
-              <p className="text-sm text-muted-foreground flex items-center gap-1">
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
                 <Clock className="w-3 h-3" /> Time to be confirmed over email
               </p>
             </div>
@@ -949,7 +948,7 @@ export function ScheduleWindowContent() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleSchedule}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-medium"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium text-sm"
             >
               <Video className="w-4 h-4" />
               Schedule a Call on this Date
@@ -959,7 +958,7 @@ export function ScheduleWindowContent() {
       )}
 
       {!selectedDate && (
-        <p className="text-center text-sm text-muted-foreground py-2">
+        <p className="text-center text-sm text-muted-foreground py-1">
           👆 Click any available date to schedule a call
         </p>
       )}
