@@ -654,7 +654,7 @@ export function NotesWindowContent({ onNavigate }: { onNavigate?: (section: stri
           {[
             { label: "View Projects", icon: <FolderKanban className="w-4 h-4" />, color: "from-violet-500 to-purple-600", action: "projects" },
             { label: "About Me", icon: <User className="w-4 h-4" />, color: "from-cyan-500 to-blue-600", action: "about" },
-            { label: "Tech Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600", action: "stack" },
+            { label: "Skills Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600", action: "stack" },
             { label: "Get in Touch", icon: <Mail className="w-4 h-4" />, color: "from-teal-500 to-cyan-600", action: "contact" },
           ].map((action, i) => (
             <motion.div
@@ -679,7 +679,7 @@ export function NotesWindowContent({ onNavigate }: { onNavigate?: (section: stri
       </motion.div>
 
       {/* Tip */}
-      <motion.div
+      <motion.div>
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
