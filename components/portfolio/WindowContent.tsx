@@ -640,9 +640,10 @@ export function NotesWindowContent({ onNavigate }: { onNavigate?: (section: stri
         <p className="text-foreground/80 leading-relaxed">
           {`This portfolio is designed to look and feel like a functional desktop operating system—dive in, explore the data, and navigate your way through the dock icons below or the menu bar above.`}
         </p>
+      </motion.div> 
 
       {/* Quick Actions */}
-      <motion.div
+      <motion.div>
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
@@ -653,7 +654,7 @@ export function NotesWindowContent({ onNavigate }: { onNavigate?: (section: stri
           {[
             { label: "View Projects", icon: <FolderKanban className="w-4 h-4" />, color: "from-violet-500 to-purple-600", action: "projects" },
             { label: "About Me", icon: <User className="w-4 h-4" />, color: "from-cyan-500 to-blue-600", action: "about" },
-            { label: "Tech Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600", action: "skills stack" },
+            { label: "Tech Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600", action: "stack" },
             { label: "Get in Touch", icon: <Mail className="w-4 h-4" />, color: "from-teal-500 to-cyan-600", action: "contact" },
           ].map((action, i) => (
             <motion.div
