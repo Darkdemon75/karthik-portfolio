@@ -44,8 +44,8 @@ export default function PortfolioPage() {
   const [highestZ, setHighestZ] = useState(100);
 
   // Settings state
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [wallpaper, setWallpaper] = useState<"mountain" | "ocean">("mountain");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [wallpaper, setWallpaper] = useState<"mountain" | "ocean">("ocean");
   const [clockFormat, setClockFormat] = useState<"12h" | "24h">("12h");
   const [cursorStyle, setCursorStyle] = useState<"default" | "dot" | "ring" | "crosshair">("default");
 
