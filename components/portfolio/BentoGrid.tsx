@@ -134,7 +134,7 @@ export function BentoGrid({ onProjectClick, onAboutClick, onStackClick, onContac
         >
           <div className="h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-foreground">Tech Stack</h3>
+              <h3 className="text-lg font-semibold text-foreground">Skills Stack</h3>
               <motion.div whileHover={{ rotate: 45 }}>
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
               </motion.div>
