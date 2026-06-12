@@ -228,7 +228,7 @@ export function AboutWindowContent() {
         </motion.div>
         <div className="flex-1">
           <h2 className="text-3xl font-bold text-foreground">Karthik Devaraj</h2>
-          <p className="text-lg text-primary mt-1">Data & IoT Engineering Intern</p>
+          <p className="text-lg text-primary mt-1">Intelligence Analyst</p>
           <div className="flex flex-wrap gap-4 mt-3 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
               <MapPin className="w-4 h-4" />
@@ -443,8 +443,9 @@ export function ContactWindowContent() {
 
 export function ResumeWindowContent() {
   const experience = [
-    { title: "Intelligence Analyst Intern", company: "Consuma AI", period: "Feb 2026 - Present", description: "Conducting market research and competitive intelligence analysis across industry verticals. Building structured reports and data-driven insights for clients to support strategic decision-making." },
-    { title: "Freelance Event Coordinator", company: "Paytm Insider (District by Zomato)", period: "Oct 2024 - Nov 2025", description: "Coordinated 35+ large-scale live events with 10,000+ attendees. Managed ticketing systems and box-office operations achieving 99%+ transaction accuracy." },
+    { title: "Intelligence Analyst", company: "Consuma AI", period: "May 2026 - Present", description: "Leading end-to-end delivery of consumer intelligence and market research reports, including brand competitor analysis, influencer studies, and creative/packaging testing. Transforming large volumes of unstructured online conversation data into strategic insights and polished, client-ready deliverables, while collaborating cross-functionally to sharpen research methodology and turnaround." },
+    { title: "Intelligence Analyst Intern", company: "Consuma AI", period: "Feb 2026 - May 2026", description: "Analyzed online consumer conversation data to extract actionable market research insights, contributing to reports across influencer analysis, brand competitor studies, and concept testing. Assisted in building structured primary and secondary research reports covering packaging testing, creative testing, and category studies." },
+    { title: "Freelance Event Coordinator", company: "Paytm Insider", period: "Oct 2024 - Nov 2025", description: "Coordinated 35+ large-scale live events with 10,000+ attendees. Managed ticketing systems and box-office operations achieving 99%+ transaction accuracy." },
   ];
 
   const education = [
@@ -734,32 +735,32 @@ export function TerminalWindowContent() {
       animate={{ opacity: 1 }}
       className="font-mono text-sm"
     >
-      <div className="bg-black/50 rounded-lg p-4 min-h-[300px] max-h-[400px] overflow-y-auto">
+      <div className="bg-zinc-900 rounded-lg p-4 min-h-[300px] max-h-[400px] overflow-y-auto">
         {history.map((entry, i) => (
           <div key={i} className="mb-2">
             {entry.command && (
               <div className="flex items-center gap-2 text-green-400">
                 <span className="text-blue-400">karthik@portfolio</span>
-                <span className="text-white">:</span>
+                <span className="text-zinc-300">:</span>
                 <span className="text-purple-400">~</span>
-                <span className="text-white">$</span>
-                <span className="text-foreground">{entry.command}</span>
+                <span className="text-zinc-300">$</span>
+                <span className="text-zinc-100">{entry.command}</span>
               </div>
             )}
-            <pre className="text-foreground/80 whitespace-pre-wrap ml-0">{entry.output}</pre>
+            <pre className="text-zinc-300 whitespace-pre-wrap ml-0">{entry.output}</pre>
           </div>
         ))}
         
         <form onSubmit={handleCommand} className="flex items-center gap-2 text-green-400">
           <span className="text-blue-400">karthik@portfolio</span>
-          <span className="text-white">:</span>
+          <span className="text-zinc-300">:</span>
           <span className="text-purple-400">~</span>
-          <span className="text-white">$</span>
+          <span className="text-zinc-300">$</span>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 bg-transparent text-foreground outline-none"
+            className="flex-1 bg-transparent text-zinc-100 outline-none"
             autoFocus
           />
         </form>
