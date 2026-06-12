@@ -246,9 +246,7 @@ export function AboutWindowContent() {
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-foreground">About Me</h3>
         <p className="text-foreground/80 leading-relaxed">
-          {`Computer Applications student with hands-on experience in IoT systems, embedded programming, and web development. 
-          Proven ability to build functional prototypes including gas detection systems, RFID-based hospital management, 
-          and IoT plant monitoring solutions. Passionate about creating data-driven solutions and automation.`}
+          {`I am an Intelligence Analyst and Computer Applications graduate who thrives at the intersection of data analytics, market research, and tech-driven operations. Currently delivering consumer intelligence at Consuma AI, my background blends rigorous analytical thinking with hands-on experience managing high-volume event operations and ticketing data for 35+ large-scale events at Paytm Insider. From transforming unstructured consumer data into strategic insights to engineering functional IoT systems, I build scalable solutions that bridge the gap between technical execution and real-world impact.`}
         </p>
       </div>
 
@@ -312,11 +310,11 @@ const fullTechStack = [
     { name: "RFID (RC522)", icon: <Globe className="w-4 h-4" /> },
     { name: "GSM Modules", icon: <Smartphone className="w-4 h-4" /> },
   ]},
-  { category: "Web & Tools", items: [
-    { name: "HTML5 / CSS3", icon: <Palette className="w-4 h-4" /> },
-    { name: "MySQL", icon: <Database className="w-4 h-4" /> },
+  { category: "Data & Operations", items: [
+    { name: "Data Analysis (Excel / SQL)", icon: <Database className="w-4 h-4" /> },
+    { name: "Ticketing & Box Office", icon: <Layers className="w-4 h-4" /> },
     { name: "Git / VS Code", icon: <Terminal className="w-4 h-4" /> },
-    { name: "UI/UX Design", icon: <Layers className="w-4 h-4" /> },
+    { name: "HTML5 / CSS3", icon: <Palette className="w-4 h-4" /> },
   ]},
 ];
 
@@ -328,7 +326,7 @@ export function StackWindowContent() {
       className="space-y-6"
     >
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Tech Stack</h2>
+        <h2 className="text-2xl font-bold text-foreground">Skills Stack</h2>
         <p className="text-muted-foreground mt-1">
           Technologies I use to bring ideas to life
         </p>
@@ -632,13 +630,16 @@ export function NotesWindowContent({ onNavigate }: { onNavigate?: (section: stri
         <p className="text-lg text-foreground/90 leading-relaxed">
           {`Welcome to my digital workspace. I'm `}
           <span className="font-semibold text-primary">Karthik Devaraj</span>
-          {`, a Data & IoT Engineering Intern passionate about building smart embedded systems and data-driven solutions.`}
+          {`, an Intelligence Analyst passionate about decoding consumer behavior, data analytics, and building smart digital systems.`}
         </p>
-        
+
         <p className="text-foreground/80 leading-relaxed">
-          {`This portfolio is designed to feel like a desktop operating system. Feel free to explore by clicking on the dock icons below or navigating through the menu bar above.`}
+          {`Currently transforming unstructured conversation data into strategic market intelligence, my work sits at the intersection of analytical thinking and technology.`}
         </p>
-      </motion.div>
+
+        <p className="text-foreground/80 leading-relaxed">
+          {`This portfolio is designed to look and feel like a functional desktop operating system—dive in, explore the data, and navigate your way through the dock icons below or the menu bar above.`}
+        </p>
 
       {/* Quick Actions */}
       <motion.div
@@ -652,7 +653,7 @@ export function NotesWindowContent({ onNavigate }: { onNavigate?: (section: stri
           {[
             { label: "View Projects", icon: <FolderKanban className="w-4 h-4" />, color: "from-violet-500 to-purple-600", action: "projects" },
             { label: "About Me", icon: <User className="w-4 h-4" />, color: "from-cyan-500 to-blue-600", action: "about" },
-            { label: "Tech Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600", action: "stack" },
+            { label: "Tech Stack", icon: <Code2 className="w-4 h-4" />, color: "from-emerald-500 to-green-600", action: "skills stack" },
             { label: "Get in Touch", icon: <Mail className="w-4 h-4" />, color: "from-teal-500 to-cyan-600", action: "contact" },
           ].map((action, i) => (
             <motion.div
