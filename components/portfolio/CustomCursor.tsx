@@ -110,37 +110,62 @@ export function CustomCursor({ cursorStyle = "default" }: CustomCursorProps) {
       default:
         return (
           <>
+            {/* Outer ring */}
             <motion.div
-              className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference"
+              className="fixed top-0 left-0 pointer-events-none z-[9999]"
               style={{ x: cursorXSpring, y: cursorYSpring }}
-              animate={{ scale: isPressed ? 0.8 : isPointer ? 1.5 : 1, opacity: isHidden ? 0 : 1 }}
+              animate={{
+                scale: isPressed ? 0.85 : isPointer ? 1.6 : 1,
+                opacity: isHidden ? 0 : 1,
+              }}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            >
+              <div
+                className="-translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-150"
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderWidth: isPointer ? "1.5px" : "1px",
+                  borderColor: isPointer
+                    ? "rgba(96,165,250,0.9)"
+                    : "rgba(255,255,255,0.55)",
+                  background: isPointer
+                    ? "rgba(96,165,250,0.08)"
+                    : "transparent",
+                  boxShadow: isPointer
+                    ? "0 0 16px 2px rgba(96,165,250,0.35)"
+                    : "none",
+                }}
+              />
+            </motion.div>
+
+            {/* Inner dot */}
+            <motion.div
+              className="fixed top-0 left-0 pointer-events-none z-[9999]"
+              style={{ x: cursorXSpring, y: cursorYSpring }}
+              animate={{
+                scale: isPressed ? 1.6 : isPointer ? 0 : 1,
+                opacity: isHidden ? 0 : 1,
+              }}
               transition={{ type: "spring", stiffness: 500, damping: 28 }}
             >
               <div
-                className="relative -translate-x-1/2 -translate-y-1/2"
-                style={{ width: isPointer ? "40px" : "12px", height: isPointer ? "40px" : "12px" }}
-              >
-                <motion.div
-                  className="absolute inset-0 rounded-full border-2 border-white"
-                  animate={{ scale: isPointer ? 1 : 0, opacity: isPointer ? 1 : 0 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                />
-                <motion.div
-                  className="absolute rounded-full bg-white"
-                  style={{ width: "12px", height: "12px", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
-                  animate={{ scale: isPointer ? 0.4 : 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                />
-              </div>
+                className="w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_6px_1px_rgba(255,255,255,0.5)]"
+              />
             </motion.div>
+
+            {/* Soft trailing glow */}
             <motion.div
               className="fixed top-0 left-0 pointer-events-none z-[9998]"
               style={{ x: trailX, y: trailY }}
-              animate={{ opacity: isHidden ? 0 : 0.3 }}
+              animate={{ opacity: isHidden ? 0 : isPointer ? 0.25 : 0.18 }}
             >
               <div
-                className="w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                style={{ background: "radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%)" }}
+                className="w-10 h-10 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(96,165,250,0.5) 0%, transparent 70%)",
+                }}
               />
             </motion.div>
           </>
